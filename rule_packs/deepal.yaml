@@ -1,0 +1,15 @@
+programme: DEEPAL
+display_name: Deepal
+brands: [Deepal]
+claim_prefix: DP
+colour: "#8a8f98"
+status: pending          # rules pending — config stub only
+pack_version: "0.0.0"
+claim_format: flat_lines
+adjudication_delay_days: [3, 5]
+payment_weekday: 3
+coverage: []
+facts: []
+dealer_rules: {}
+gateway_only_checks: []
+rejection_wording: {}

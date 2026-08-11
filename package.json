@@ -1,0 +1,20 @@
+{
+  "name": "warranty-claims",
+  "private": true,
+  "description": "Warranty Claims Agent Platform — MVP (fake Autoline, simulated OEM gateway, fake LLM)",
+  "scripts": {
+    "setup": "uv sync && npm --prefix infra/pglite install && npm --prefix apps/web install",
+    "dev": "uv run python scripts/dev.py",
+    "dev:backend": "uv run python scripts/dev.py --no-web",
+    "stop": "powershell -NoProfile -File scripts/stop.ps1",
+    "web:build": "npm --prefix apps/web run build",
+    "warranty:seed:build": "uv run python scripts/warranty/build_default_seed.py",
+    "warranty:seed:generate": "uv run python scripts/warranty/generate_seed.py",
+    "warranty:seed": "uv run python scripts/warranty/seed.py",
+    "warranty:reset": "uv run python scripts/warranty/reset.py",
+    "warranty:run": "uv run python scripts/warranty/run.py",
+    "warranty:record-replays": "uv run python scripts/warranty/record_replays.py",
+    "typecheck": "npm --prefix apps/web run typecheck",
+    "test": "uv run pytest -q && npm --prefix apps/web run typecheck"
+  }
+}

@@ -1,0 +1,47 @@
+programme: FORD_TRUCKS
+display_name: Ford Trucks
+brands: [Ford Trucks]
+claim_prefix: FT
+colour: "#5b6470"
+status: active
+pack_version: "2026.11.1"
+claim_format: lines_with_chassis
+adjudication_delay_days: [2, 4]
+payment_weekday: 3          # Thursday
+coverage:
+  - contract_type: BASE
+    label: New-vehicle warranty
+    years: 2
+    km_limit: null
+    source: public
+    source_url: https://www.altayermotors.com/ford-trucks/aftersales/warranty/
+    last_verified: null
+  - contract_type: EXTENDED
+    label: Extendable
+    years: null
+    km_limit: null
+    source: public
+    source_url: https://www.altayermotors.com/ford-trucks/aftersales/warranty/
+    last_verified: null
+facts: []
+dealer_rules:
+  submission_window: {days: 30, label: "30 days", source: illustrative}
+  pre_authorisation: {when: "amount_ex_vat > 10000", label: "> AED 10,000", source: illustrative}
+  labour_tolerance: {pct: 20, requires_tech_note: false, label: "20% over standard time", source: illustrative}
+  required_evidence:
+    label: "Odometer / hour-meter photo"
+    source: illustrative
+    items:
+      - {when: "True", kinds: [odometer_photo], label: "odometer / hour-meter photo"}
+  narrative_3c: {min_chars: 20, label: "3C", source: illustrative}
+  parts_retention: {days: 60, label: "60 days", source: illustrative}
+  repeat_repair: {days: 30, needs: flag, label: "Flag", source: illustrative}
+  max_resubmissions: {value: 2, label: "2", source: illustrative}
+  labour_rate_cap: {aed: 380, label: "AED 380/hr", source: illustrative}
+  claim_format: {label: "Lines + chassis/axle refs", source: illustrative}
+gateway_only_checks:
+  - {rule: leak_photo, code: R04, label: "Leak / seal claims need a photo of the leak"}
+rejection_wording:
+  R03: "Labour exceeds standard."
+  R04: "Photo evidence of leak required."
+  R06: "Axle / chassis reference mismatch."

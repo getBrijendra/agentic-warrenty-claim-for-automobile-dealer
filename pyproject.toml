@@ -1,0 +1,51 @@
+[project]
+name = "warranty-claims"
+version = "0.1.0"
+description = "Warranty Claims Agent Platform — MVP (fake Autoline, simulated OEMs, fake LLM)"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn>=0.30",
+  "httpx>=0.27",
+  "pydantic>=2.8",
+  "pydantic-settings>=2.4",
+  "psycopg[binary]>=3.2",
+  "psycopg-pool>=3.2",
+  "pyyaml>=6",
+  "simpleeval>=1.0",
+  "langgraph>=0.2",
+  "langchain-core>=0.3",
+  "structlog>=24",
+  "sse-starlette>=2.1",
+]
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-asyncio>=0.24"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = [
+  "packages/py/wc_core", "packages/py/wc_db", "packages/py/wc_rules", "packages/py/wc_oem",
+  "packages/py/wc_agents", "packages/py/wc_llm", "packages/py/wc_events", "packages/py/wc_groundtruth",
+  "services/api", "services/orchestrator", "services/scheduler", "services/outbox_relay",
+  "services/dms_connector", "services/oem_hub", "services/llm_gateway",
+  "services/oem_gateway_sim", "services/workshop_sim",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[project.entry-points."wc.oem_connectors"]
+"FORD.sim" = "wc_oem.connectors.sim:ford"
+"FORD_TRUCKS.sim" = "wc_oem.connectors.sim:ford_trucks"
+"JLR.sim" = "wc_oem.connectors.sim:jlr"
+"FERRARI.sim" = "wc_oem.connectors.sim:ferrari"
+"MASERATI.sim" = "wc_oem.connectors.sim:maserati"
+"VINFAST.sim" = "wc_oem.connectors.sim:vinfast"
+"FORD.real" = "wc_oem.connectors.sim:RealConnectorStub"
+"JLR.real" = "wc_oem.connectors.sim:RealConnectorStub"

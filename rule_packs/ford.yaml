@@ -1,0 +1,70 @@
+programme: FORD
+display_name: Ford & Lincoln
+brands: [Ford, Lincoln]
+claim_prefix: FD
+colour: "#2b5fab"
+status: active
+pack_version: "2026.11.1"
+claim_format: flat_lines
+adjudication_delay_days: [2, 4]
+payment_weekday: 3          # 0 = Monday; Ford weekly payment run on Thursday (simulated)
+coverage:
+  - contract_type: BASE
+    label: New-vehicle warranty
+    years: 5
+    km_limit: 100000
+    source: public
+    source_url: https://www.altayermotors.com/ford/service-warranty/
+    last_verified: null
+  - contract_type: EXTENDED
+    label: Extended Service Plan (ESP), up to
+    years: 7
+    km_limit: 300000
+    source: public
+    source_url: https://www.altayermotors.com/ford/service-warranty/
+    last_verified: null
+  - contract_type: PREMIUMCARE
+    label: PremiumCare, up to
+    years: 8
+    km_limit: 300000
+    note: Must be bought within 5 yrs / 100,000 km. Requires all periodic services done.
+    source: public
+    source_url: https://www.altayermotors.com/ford/faq
+    last_verified: null
+facts:
+  - label: Service interval
+    value: Every 10,000 km or 6 months
+    source: public
+    source_url: https://www.altayermotors.com/ford/faq
+    last_verified: null
+dealer_rules:
+  submission_window: {days: 30, label: "30 days", source: illustrative}
+  pre_authorisation: {when: "amount_ex_vat > 7500", label: "> AED 7,500", source: illustrative}
+  labour_tolerance: {pct: 10, requires_tech_note: false, label: "10% over standard time", source: illustrative}
+  required_evidence:
+    label: "Photos for leaks/body; DTC for electrical"
+    source: illustrative
+    items:
+      - {when: "is_leak or system == 'BODY'", kinds: [photo], label: "photo of leak / body damage"}
+      - {when: "is_electrical", kinds: [dtc_snapshot], label: "DTC snapshot"}
+  narrative_3c: {min_chars: 20, cause_names_causal_part: true, label: "Full 3C; cause must name causal part", source: illustrative}
+  parts_retention: {days: 60, label: "60 days", source: illustrative}
+  repeat_repair: {days: 30, needs: ta_case, label: "2nd repair same system < 30 days → TA case", source: illustrative}
+  max_resubmissions: {value: 2, label: "2", source: illustrative}
+  labour_rate_cap: {aed: 420, label: "AED 420/hr", source: illustrative}
+  claim_format: {label: "Flat lines, LOP + condition code", source: illustrative}
+gateway_only_checks:
+  - {rule: causal_part_family, code: R06, label: "Causal part family must match the labour operation"}
+  - {rule: labour_evidence, code: R03, label: "Over-standard labour needs written justification + photo"}
+rejection_wording:
+  R01: "Vehicle outside new-vehicle / ESP coverage."
+  R02: "Claim received outside the dealer submission window."
+  R03: "Labour time exceeds published LOP time; no supporting justification."
+  R04: "Required supporting documentation not attached."
+  R05: "Complaint/Cause/Correction narrative insufficient."
+  R06: "Causal part does not correspond to the labour operation claimed."
+  R07: "Duplicate of a previously submitted claim."
+  R08: "Prior approval not on file."
+  R10: "Open Field Service Action applies; resubmit under FSA."
+  R11: "Maintenance records do not meet programme conditions."
+  R12: "Failure attributable to non-genuine modification."

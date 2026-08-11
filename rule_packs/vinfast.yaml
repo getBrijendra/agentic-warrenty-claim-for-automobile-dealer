@@ -1,0 +1,57 @@
+programme: VINFAST
+display_name: VinFast
+brands: [VinFast]
+claim_prefix: VF
+colour: "#0f7d8c"
+status: active
+pack_version: "2026.11.1"
+claim_format: lines_with_modules
+adjudication_delay_days: [2, 5]
+payment_weekday: 0          # Monday
+coverage:
+  - contract_type: BASE
+    label: Vehicle warranty
+    years: 10
+    km_limit: 200000
+    source: public
+    source_url: https://www.altayermotors.com/vinfast/aftersales/warranty/
+    last_verified: null
+  - contract_type: COMPONENT_BATTERY
+    label: HV battery (separate component term)
+    years: 10
+    km_limit: null
+    component_scope: [HV_BATTERY]
+    source: public
+    source_url: https://www.altayermotors.com/vinfast/aftersales/warranty/
+    last_verified: null
+  - contract_type: MAINTENANCE_PROGRAMME
+    label: Free maintenance
+    years: 5
+    km_limit: 100000
+    source: public
+    source_url: https://www.altayermotors.com/vinfast/aftersales/warranty/
+    last_verified: null
+facts: []
+dealer_rules:
+  submission_window: {days: 45, label: "45 days", source: illustrative}
+  pre_authorisation: {when: "system == 'HV_BATTERY'", label: "All HV battery", source: illustrative}
+  labour_tolerance: {pct: 10, requires_tech_note: false, label: "10% over standard time", source: illustrative}
+  required_evidence:
+    label: "Battery SOH report + remote log for HV"
+    source: illustrative
+    items:
+      - {when: "system == 'HV_BATTERY'", kinds: [battery_soh_report, diag_log], label: "battery SOH report + remote diagnostic log"}
+      - {when: "system == 'CHARGING'", kinds: [diag_log], label: "remote diagnostic log"}
+  narrative_3c: {min_chars: 20, require_hv_tech_id_when: "is_hv", label: "3C + HV-certified tech ID", source: illustrative}
+  parts_retention: {days: 90, label: "90 days", source: illustrative}
+  repeat_repair: {days: 30, needs: flag, label: "Flag", source: illustrative}
+  max_resubmissions: {value: 3, label: "3", source: illustrative}
+  labour_rate_cap: {aed: 400, label: "AED 400/hr", source: illustrative}
+  claim_format: {label: "Lines + battery module serials", source: illustrative}
+gateway_only_checks:
+  - {rule: battery_module_serials, code: R06, label: "HV module lines must carry module serial numbers"}
+rejection_wording:
+  R01: "Outside warranty term."
+  R04: "Battery SOH report / remote log missing."
+  R06: "Module serial missing or mismatched."
+  R07: "Duplicate claim."

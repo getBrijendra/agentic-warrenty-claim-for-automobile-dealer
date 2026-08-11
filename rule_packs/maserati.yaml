@@ -1,0 +1,63 @@
+programme: MASERATI
+display_name: Maserati
+brands: [Maserati]
+claim_prefix: MS
+colour: "#22406e"
+status: active
+pack_version: "2026.11.1"
+claim_format: flat_lines
+adjudication_delay_days: [3, 7]
+payment_weekday: 2          # Wednesday
+coverage:
+  - contract_type: BASE
+    label: New-vehicle warranty
+    years: 3
+    km_limit: null
+    source: public
+    source_url: https://www.altayermotors.com/maserati/aftersales/servicing
+    last_verified: null
+  - contract_type: EXTENDED
+    label: Extended warranty years 4–5 (bumper-to-bumper)
+    years: 5
+    km_limit: null
+    note: Must be activated before base expiry; km limit at activation.
+    source: public
+    source_url: https://www.maserati.com/
+    last_verified: null
+  - contract_type: LIMITED_EXTENDED
+    label: Limited Extended years 6–7 (drive-line only — engine, gearbox, transmission)
+    years: 7
+    km_limit: null
+    component_scope: [ENGINE, TRANSMISSION, DRIVELINE]
+    source: public
+    source_url: https://www.maserati.com/
+    last_verified: null
+facts:
+  - label: Service package
+    value: Dealer adds a service package
+    source: public
+    source_url: https://www.altayermotors.com/maserati/aftersales/servicing
+    last_verified: null
+dealer_rules:
+  submission_window: {days: 30, label: "30 days", source: illustrative}
+  pre_authorisation: {when: "amount_ex_vat > 6000", label: "> AED 6,000", source: illustrative}
+  labour_tolerance: {pct: 10, requires_tech_note: false, label: "10% over standard time", source: illustrative}
+  required_evidence:
+    label: "DTC + photos"
+    source: illustrative
+    items:
+      - {when: "is_electrical", kinds: [dtc_snapshot, photo], label: "DTC snapshot + photo"}
+      - {when: "not is_electrical", kinds: [photo], label: "photo"}
+  narrative_3c: {min_chars: 20, label: "3C", source: illustrative}
+  parts_retention: {days: 60, label: "60 days", source: illustrative}
+  repeat_repair: {days: 30, needs: flag, label: "Flag", source: illustrative}
+  max_resubmissions: {value: 2, label: "2", source: illustrative}
+  labour_rate_cap: {aed: 560, label: "AED 560/hr", source: illustrative}
+  claim_format: {label: "Flat lines + cost codes", source: illustrative}
+gateway_only_checks:
+  - {rule: contract_scope, code: R09, label: "Component must be inside the active contract's scope"}
+rejection_wording:
+  R01: "Vehicle out of warranty."
+  R03: "Labour above flat-rate time."
+  R04: "RO documentation incomplete."
+  R09: "Component not covered under Limited Extended Warranty (drive-line only)."

@@ -1,0 +1,61 @@
+programme: FERRARI
+display_name: Ferrari
+brands: [Ferrari]
+claim_prefix: FE
+colour: "#b3261e"
+status: active
+pack_version: "2026.11.1"
+claim_format: single_section
+adjudication_delay_days: [5, 10]
+payment_weekday: 4          # Friday
+coverage:
+  - contract_type: BASE
+    label: New-vehicle warranty
+    years: 3
+    km_limit: null
+    source: public
+    source_url: https://www.ferrari.com/en-US/auto/car-part-services-warranty-maintenance
+    last_verified: null
+  - contract_type: EXTENDED
+    label: Warranty extension, up to 4 extra years
+    years: 7
+    km_limit: null
+    source: public
+    source_url: https://www.ferrari.com/en-US/auto/car-part-services-warranty-maintenance
+    last_verified: null
+  - contract_type: MAINTENANCE_PROGRAMME
+    label: Genuine Maintenance programme
+    years: 7
+    km_limit: null
+    source: public
+    source_url: https://www.ferrari.com/en-US/auto/car-part-services-warranty-maintenance
+    last_verified: null
+facts:
+  - label: Power15
+    value: Covers major components up to year 15
+    source: public
+    source_url: https://www.ferrari.com/en-US/auto/car-part-services-warranty-maintenance
+    last_verified: null
+dealer_rules:
+  submission_window: {days: 30, label: "30 days", source: illustrative}
+  pre_authorisation: {when: "is_powertrain or amount_ex_vat > 3000", label: "All powertrain + any > AED 3,000", source: illustrative}
+  labour_tolerance: {pct: 15, requires_tech_note: false, label: "15% over standard time", source: illustrative}
+  required_evidence:
+    label: "Tech-support case ref for powertrain"
+    source: illustrative
+    items:
+      - {when: "is_powertrain", kinds: [tech_support_ref], label: "technical support case reference"}
+  narrative_3c: {min_chars: 20, require_support_ref_when: "is_powertrain", label: "3C + support ref", source: illustrative}
+  parts_retention: {days: 120, label: "120 days", source: illustrative}
+  repeat_repair: {days: 60, needs: pre_auth, label: "Repeat repair → always PA", source: illustrative}
+  max_resubmissions: {value: 2, label: "2", source: illustrative}
+  labour_rate_cap: {aed: 650, label: "AED 650/hr", source: illustrative}
+  claim_format: {label: "Single section + support ticket", source: illustrative}
+gateway_only_checks:
+  - {rule: oem_repeat_repair, code: R08, days: 60, label: "Repeat repair in OEM history requires authorisation"}
+rejection_wording:
+  R01: "Vehicle not covered."
+  R03: "Operation time above allowed time."
+  R04: "Technical assistance reference missing."
+  R05: "Service Entry description incomplete."
+  R08: "Authorisation code not present for this operation."
