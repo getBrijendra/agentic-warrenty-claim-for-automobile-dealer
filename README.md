@@ -1,7 +1,7 @@
 # Warranty Claims Agent Platform — MVP
 
 Agents turn closed Autoline WIPs (job cards) into OEM warranty claims: triage → build → compliance → submit →
-track → resolve rejections → escalate to a human. Product spec: [CLAUDE.md](CLAUDE.md). System design: [agent.md](agent.md).
+track → resolve rejections → escalate to a human. 
 This is the MVP defined in agent.md §23: **one desk, six rulebooks, end-to-end on fake everything.**
 
 | Part | Status in this MVP |
